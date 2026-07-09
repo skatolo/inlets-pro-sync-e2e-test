@@ -17,7 +17,7 @@ permissions:
 jobs:
   sync-images:
     name: Sync missing images
-    runs-on: ubuntu-latest
+    runs-on: actuated-8cpu-12gb
 
     steps:
       - name: Setup arkade
