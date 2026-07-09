@@ -45,7 +45,15 @@ jobs:
             source_tags="$(crane ls "${SOURCE_IMAGE}" | sort -V)"
           fi
 
-          target_tags="$(crane ls "${TARGET_IMAGE}" | sort -V)"
+          target_tags_err="$(mktemp)"
+          if target_tags="$(crane ls "${TARGET_IMAGE}" 2>"${target_tags_err}" | sort -V)"; then
+            :
+          elif grep -q "NAME_UNKNOWN" "${target_tags_err}"; then
+            target_tags=""
+          else
+            cat "${target_tags_err}" >&2
+            exit 1
+          fi
 
           copied=0
           skipped=0
